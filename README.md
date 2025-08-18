@@ -19,7 +19,7 @@ Get [uv] and spin a toupie server with
 uvx --from git+https://github.com/boisgera/toupie toupie
 ```
 
-If you need additional Python dependencies, use the `--with` flag.
+If you need additional Python dependencies, use the `--with` option.
 For example:
 
 ```bash

@@ -8,6 +8,7 @@ import time
 
 # Third-Party Librairies
 from flask import Flask, request
+import typer
 from yaspin import yaspin
 import waitress
 
@@ -16,17 +17,15 @@ HOST = "127.0.0.1"
 PORT = "8000"
 
 
+def spinner(port=PORT):
+    def spin():
+        with yaspin(text=f"Toupie spinning at http://{HOST}:{port}. "):
+            while True:
+                time.sleep(1.0)
+    return spin
 
-def spinner_task():
-    with yaspin(text=f"Toupie running on http://{HOST}:{PORT}... "):
-        while True:
-            time.sleep(1.0)
-
-
-threading.Thread(target=spinner_task, daemon=True).start()
 
 app = Flask(__name__)
-
 
 @app.route("/", methods=["POST"])
 def handler():
@@ -41,7 +40,10 @@ def handler():
         output = f"{type(error).__name__}: {error}"
     return output
 
-
-def main():
+def serve(port: int = PORT):
+    threading.Thread(target=spinner(port), daemon=True).start()
     logging.getLogger("waitress.queue").setLevel(logging.ERROR)
-    waitress.serve(app, host=HOST, port=PORT, threads=1)
+    waitress.serve(app, host=HOST, port=port, threads=1)
+
+def main(): 
+    return typer.run(serve)

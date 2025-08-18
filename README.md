@@ -19,4 +19,22 @@ for example:
 uvx --with raylib --from git+https://github.com/boisgera/toupie toupie
 ```
 
+
+### Sanity check
+
+To check that your Toupie server works as expected, do
+
+```bash
+curl -X POST http://127.0.0.1:8000 -H "Content-Type: text/plain" --data-binary "print(1+1)"
+```
+
+or if `curl` is not available
+
+```bash
+uvx --with requests python -c "import requests; r = requests.post(url='http://127.0.0.1:8000', headers={'Content-Type': 'text/plain'}, data='print(1+1)'); print(r.text)"
+```
+
+In any case, you should see `2` printed in your terminal.
+
+
 [uv]: https://docs.astral.sh/uv/

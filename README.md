@@ -6,16 +6,17 @@ Toupie
 Getting Started
 --------------------------------------------------------------------------------
 
-Get [uv] and install toupie
+Get [uv] and start a toupie server with
 
 ```bash
-uv pip install "git+https://github.com/boisgera/toupie"
+uvx --from git+https://github.com/boisgera/toupie toupie
 ```
 
-then start the server with
+If you need additional Python dependencies, specify them with the `--with` flag;
+for example:
 
 ```bash
-uv run toupie
+uvx --with raylib --from git+https://github.com/boisgera/toupie toupie
 ```
 
 [uv]: https://docs.astral.sh/uv/

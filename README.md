@@ -19,10 +19,12 @@ For example:
 uvx --with raylib --from git+https://github.com/boisgera/toupie toupie
 ```
 
+> [!WARNING]  
+> Anyone that gets access to a running toupie server can do [a lot of damage]!
 
 ### Sanity check
 
-To check that your Toupie server works as expected, do
+To check that your toupie server works as expected, do
 
 ```bash
 curl -X POST http://127.0.0.1:8000 -H "Content-Type: text/plain" --data-binary "print(1+1)"
@@ -36,5 +38,10 @@ uvx --with requests python -c "import requests; r = requests.post(url='http://12
 
 In any case, you should see `2` printed in your terminal.
 
+FAQ
+--------------------------------------------------------------------------------
+
+🚧 **TODO**
 
 [uv]: https://docs.astral.sh/uv/
+[a lot of damage]: https://www.youtube.com/watch?v=JZLAHGfznlY

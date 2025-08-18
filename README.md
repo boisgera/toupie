@@ -6,7 +6,7 @@ Toupie
 Getting Started
 --------------------------------------------------------------------------------
 
-Get [uv], then install toupie with 
+Get [uv] and install toupie
 
 ```bash
 uv pip install "git+https://github.com/boisgera/toupie"

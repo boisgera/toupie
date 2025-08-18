@@ -1,14 +1,25 @@
 import ast
+from contextlib import redirect_stdout
 import io
 import logging
-from contextlib import redirect_stdout
+import threading
+import time
 
 from flask import Flask, request
+from yaspin import yaspin
 import waitress
 
 logging.getLogger("waitress.queue").setLevel(logging.ERROR)
 
 app = Flask(__name__)
+
+def spinner_task():
+    """This runs continuously in a separate thread."""
+    with yaspin(text="Toupie running..."):
+        while True:
+            time.sleep(1.0)
+
+threading.Thread(target=spinner_task, daemon=True).start()
 
 @app.route("/", methods=["POST"])
 def handler():

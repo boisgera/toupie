@@ -6,7 +6,7 @@ Toupie
 Getting Started
 --------------------------------------------------------------------------------
 
-Install with 
+Get [uv], then install toupie with 
 
 ```bash
 uv pip install "git+https://github.com/boisgera/toupie"
@@ -17,3 +17,5 @@ then start the server with
 ```bash
 uv run toupie
 ```
+
+[uv]: https://docs.astral.sh/uv/

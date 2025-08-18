@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 def spinner_task():
     """This runs continuously in a separate thread."""
-    with yaspin(text="Toupie running..."):
+    with yaspin(text="Toupie running... "):
         while True:
             time.sleep(1.0)
 

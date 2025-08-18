@@ -19,7 +19,7 @@ For example:
 uvx --with raylib --from git+https://github.com/boisgera/toupie toupie
 ```
 
-> [!WARNING]  
+> [!CAUTION]  
 > Anyone that gets access to a running toupie server can do [a lot of damage]!
 
 ### Sanity check

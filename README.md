@@ -20,7 +20,7 @@ uvx --with raylib --from git+https://github.com/boisgera/toupie toupie
 ```
 
 > [!CAUTION]  
-> Anyone that gets access to a running toupie server can do [a lot of damage]!
+> Anyone that gets access to your running toupie server can do [a lot of damage]!
 
 ### Sanity check
 

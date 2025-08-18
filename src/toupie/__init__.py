@@ -1,3 +1,4 @@
+# Python Standard Library
 import ast
 from contextlib import redirect_stdout
 import io
@@ -5,21 +6,27 @@ import logging
 import threading
 import time
 
+# Third-Party Librairies
 from flask import Flask, request
 from yaspin import yaspin
 import waitress
 
-logging.getLogger("waitress.queue").setLevel(logging.ERROR)
+# Constants
+HOST = "127.0.0.1"
+PORT = "8000"
 
-app = Flask(__name__)
+
 
 def spinner_task():
-    """This runs continuously in a separate thread."""
-    with yaspin(text="Toupie running... "):
+    with yaspin(text=f"Toupie running on http://{HOST}:{PORT}... "):
         while True:
             time.sleep(1.0)
 
+
 threading.Thread(target=spinner_task, daemon=True).start()
+
+app = Flask(__name__)
+
 
 @app.route("/", methods=["POST"])
 def handler():
@@ -34,5 +41,7 @@ def handler():
         output = f"{type(error).__name__}: {error}"
     return output
 
+
 def main():
-    waitress.serve(app, host="127.0.0.1", port=8000, threads=1)
+    logging.getLogger("waitress.queue").setLevel(logging.ERROR)
+    waitress.serve(app, host=HOST, port=PORT, threads=1)

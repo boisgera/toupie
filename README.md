@@ -12,8 +12,8 @@ Get [uv] and start a toupie server with
 uvx --from git+https://github.com/boisgera/toupie toupie
 ```
 
-If you need additional Python dependencies, specify them with the `--with` flag;
-for example:
+If you need additional Python dependencies, specify them with the `--with` flag.
+For example:
 
 ```bash
 uvx --with raylib --from git+https://github.com/boisgera/toupie toupie

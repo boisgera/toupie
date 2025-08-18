@@ -36,12 +36,8 @@ or if `curl` is not available
 uvx --with requests python -c "import requests; r = requests.post(url='http://127.0.0.1:8000', headers={'Content-Type': 'text/plain'}, data='print(1+1)'); print(r.text)"
 ```
 
-In any case, you should see `2` printed in your terminal.
+In any case, you should see `2` should printed in your terminal.
 
-FAQ
---------------------------------------------------------------------------------
-
-🚧 **TODO**
 
 [uv]: https://docs.astral.sh/uv/
 [a lot of damage]: https://www.youtube.com/watch?v=JZLAHGfznlY

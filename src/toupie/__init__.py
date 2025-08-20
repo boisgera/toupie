@@ -20,12 +20,12 @@ PORT = "8000"
 verbose = False
 
 
-def spinner(port=PORT):
-    def spin():
-        with yaspin(text=f"Toupie spinning at http://{HOST}:{port}. "):
-            while True:
-                time.sleep(1.0)
-    return spin
+# def spinner(port=PORT):
+#     def spin():
+#         with yaspin(text=f"Toupie spinning at http://{HOST}:{port}. "):
+#             while True:
+#                 time.sleep(1.0)
+#     return spin
 
 
 app = Flask(__name__)
@@ -51,7 +51,7 @@ def handler():
 
 def serve(port: int = PORT, verbose: bool = False):
     globals()["verbose"] = verbose
-    threading.Thread(target=spinner(port), daemon=True).start()
+    # threading.Thread(target=spinner(port), daemon=True).start()
     logging.getLogger("waitress.queue").setLevel(logging.ERROR)
     waitress.serve(app, host=HOST, port=port, threads=1)
 

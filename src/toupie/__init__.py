@@ -51,6 +51,7 @@ def handler():
 
 def serve(port: int = PORT, verbose: bool = False):
     globals()["verbose"] = verbose
+    print(f"Toupie spinning at http://{HOST}:{port}")
     # threading.Thread(target=spinner(port), daemon=True).start()
     logging.getLogger("waitress.queue").setLevel(logging.ERROR)
     waitress.serve(app, host=HOST, port=port, threads=1)

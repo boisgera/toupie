@@ -24,7 +24,11 @@ app = Flask(__name__)
 
 def annotate(symbol, text):
     lines = text.splitlines()
-    lines = [symbol] + [0 * " " + l for l in lines]
+    if lines == []:
+        lines = [""]
+    sidebar = [4 * " " for _ in lines]
+    sidebar[0] = symbol + 3 * " "
+    lines = [s + l for (s, l) in zip(sidebar, lines)]
     return "\n".join(lines)
 
 
@@ -56,8 +60,7 @@ def handler():
 
 def serve(port: int = PORT, verbose: bool = False):
     globals()["verbose"] = verbose
-    print("🌀")
-    print(f"Toupie spinning at http://{HOST}:{port}")
+    print(annotate("⏳", f"Toupie spinning at http://{HOST}:{port}"))
     logging.getLogger("waitress.queue").setLevel(logging.ERROR)
     waitress.serve(app, host=HOST, port=port, threads=1)
 

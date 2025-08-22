@@ -24,12 +24,7 @@ app = Flask(__name__)
 
 def annotate(symbol, text):
     lines = text.splitlines()
-    if lines == []:
-        lines = [""]
-    sidebar = ["    " for _ in lines]
-    width  = 1 # len(symbol) does not count the # of grapheme clusters :(
-    sidebar[0] = symbol + (4 - width) * " "
-    lines = [s + l for (s, l) in zip(sidebar, lines)]
+    lines = [symbol] + [0 * " " + l for l in lines]
     return "\n".join(lines)
 
 
@@ -61,6 +56,7 @@ def handler():
 
 def serve(port: int = PORT, verbose: bool = False):
     globals()["verbose"] = verbose
+    print("🌀")
     print(f"Toupie spinning at http://{HOST}:{port}")
     logging.getLogger("waitress.queue").setLevel(logging.ERROR)
     waitress.serve(app, host=HOST, port=port, threads=1)

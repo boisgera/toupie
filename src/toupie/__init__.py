@@ -60,7 +60,7 @@ def handler():
 
 def serve(port: int = PORT, verbose: bool = False):
     globals()["verbose"] = verbose
-    print(annotate("⏳", f"Toupie spinning at http://{HOST}:{port}"))
+    print(f"Toupie spinning at http://{HOST}:{port}")
     logging.getLogger("waitress.queue").setLevel(logging.ERROR)
     waitress.serve(app, host=HOST, port=port, threads=1)
 

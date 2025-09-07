@@ -1,0 +1,1 @@
+uv run --dev python -m doctest test.py

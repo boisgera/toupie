@@ -345,25 +345,19 @@ source = { editable = "." }
 dependencies = [
     { name = "flask" },
     { name = "raylib" },
+    { name = "requests" },
     { name = "typer" },
     { name = "waitress" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "requests" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "flask", specifier = ">=3.1.1" },
     { name = "raylib", specifier = ">=5.5.0.2" },
+    { name = "requests", specifier = ">=2.32.5" },
     { name = "typer", specifier = ">=0.16.0" },
     { name = "waitress", specifier = ">=3.0.2" },
 ]
-
-[package.metadata.requires-dev]
-dev = [{ name = "requests", specifier = ">=2.32.5" }]
 
 [[package]]
 name = "typer"

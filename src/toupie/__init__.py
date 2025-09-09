@@ -60,7 +60,7 @@ def spin(
 ) -> Process | None:
     global logger
     if background:
-        p = Process(target=lambda: spin(port=port, verbose=verbose), daemon=True)
+        p = Process(target=lambda: spin(port=port, log=log), daemon=True)
         p.start()
         return p
     else:

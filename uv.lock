@@ -346,6 +346,7 @@ dependencies = [
     { name = "flask" },
     { name = "raylib" },
     { name = "requests" },
+    { name = "rich" },
     { name = "typer" },
     { name = "waitress" },
 ]
@@ -355,6 +356,7 @@ requires-dist = [
     { name = "flask", specifier = ">=3.1.1" },
     { name = "raylib", specifier = ">=5.5.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
+    { name = "rich", specifier = ">=14.1.0" },
     { name = "typer", specifier = ">=0.16.0" },
     { name = "waitress", specifier = ">=3.0.2" },
 ]

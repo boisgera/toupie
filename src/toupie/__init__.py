@@ -4,11 +4,13 @@ from contextlib import redirect_stdout
 import io
 import logging
 from multiprocessing import Process
+from typing import Literal
 
 
 # Third-Party Librairies
 from flask import Flask, request
 import requests
+from rich.logging import RichHandler
 import typer
 import waitress
 
@@ -22,57 +24,26 @@ count = 0
 
 app = Flask(__name__)
 
-
-def annotator(type: str, pad: int = 8, gutter: str = " ") -> str:
-    if len(type) <= pad:
-        message = type + (pad - len(type)) * " "
-    else:
-        message = type[:8]
-        message[-1] = "…"
-
-    def annotate(text: str) -> str:
-        lines = text.splitlines()
-        if lines == []:
-            lines = [""]
-        sidebar = [pad * " " for _ in lines]
-        sidebar[0] = message
-        lines = [s + gutter + l for (s, l) in zip(sidebar, lines)]
-        return "\n".join(lines)
-
-    return annotate
-
-
-INFO = annotator("INFO")
-WARNING = annotator("WARNING")
-ERROR = annotator("ERROR")
-INPUT = annotator("<-")
-OUTPUT = annotator("->")
-
-
-# TODO: factor out server-side information
+# TODO: reinstantiate the test eval with ast then eval with exec as a fallback?
+#       So that the interaction would "feel" like a Python console...
+# TODO: factor out server-side information?
 @app.route("/", methods=["POST"])
 def handler() -> str | tuple[str, int]:
-    global count
-    count += 1
-    if verbose >= 1:
-        print(60 * "-")
-        print(INFO(f"exec #{count}"))
-
     code = request.data.decode("utf-8").strip()
-    if verbose >= 1:
-        print(INPUT(code))
+    lines = ["... " + line for line in code.splitlines()]
+    lines[0] = ">>> " + lines[0][4:]
+    logger.info("\n".join(lines))
     try:
         output_stream = io.StringIO()
         with redirect_stdout(output_stream):
             ast.parse(code, mode="exec")
             exec(code, globals())
         output = output_stream.getvalue()
-        if verbose >= 1:
-            print(OUTPUT(output))
+        logger.info(f"{output}")
     except Exception as e:
-        error = f"{type(e).__name__}: {e}"
-        if verbose >= 1:
-            print(ERROR(error))
+        error = f"{type(e).__name__}: {e}" # TODO: style first part in red + bold
+        logger.error(error)
+        # logger.exception(error)
         output = error, requests.codes.bad_request
     return output
 
@@ -85,19 +56,29 @@ def send(code: str, port: int = PORT) -> str:
     )
     return response
 
+
 def spin(
     port: int = PORT,
-    verbose: int = 0,
+    log: str = "INFO",
     background: bool = False,
 ) -> Process | None:
+    global logger
     if background:
         p = Process(target=lambda: spin(port=port, verbose=verbose), daemon=True)
         p.start()
         return p
     else:
         globals()["verbose"] = verbose
+        logging.basicConfig(
+            level=log,
+            format="%(message)s",
+            datefmt="[%X]",
+            handlers=[RichHandler()]
+        )
+
+        logger = logging.getLogger("toupie")
         if verbose >= 0:
-            print(f"Toupie spinning at http://{HOST}:{port}")
+            logger.info(f"Toupie spinning at http://{HOST}:{port}")
         logging.getLogger("waitress.queue").setLevel(logging.ERROR)
         waitress.serve(app, host=HOST, port=port, threads=1)
 

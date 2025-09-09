@@ -37,6 +37,7 @@ def handler() -> str | tuple[str, int]:
         output = output_stream.getvalue()
         logger.info(f"{output}")
     except Exception as e:
+        # TODO: error to little info if INFO level not set, no?
         error = f"{type(e).__name__}: {e}"  # TODO: style first part in red + bold
         logger.error(error)
         # logger.exception(error)
@@ -69,8 +70,7 @@ def spin(
         )
 
         logger = logging.getLogger("toupie")
-        if verbose >= 0:
-            logger.info(f"Toupie spinning at http://{HOST}:{port}")
+        logger.info(f"Toupie spinning at http://{HOST}:{port}")
         logging.getLogger("waitress.queue").setLevel(logging.ERROR)
         waitress.serve(app, host=HOST, port=port, threads=1)
 

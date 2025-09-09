@@ -18,15 +18,11 @@ import waitress
 HOST = "127.0.0.1"
 PORT = "8000"
 
-# State
-verbose = 1
-count = 0
-
 app = Flask(__name__)
+
 
 # TODO: reinstantiate the test eval with ast then eval with exec as a fallback?
 #       So that the interaction would "feel" like a Python console...
-# TODO: factor out server-side information?
 @app.route("/", methods=["POST"])
 def handler() -> str | tuple[str, int]:
     code = request.data.decode("utf-8").strip()
@@ -41,7 +37,7 @@ def handler() -> str | tuple[str, int]:
         output = output_stream.getvalue()
         logger.info(f"{output}")
     except Exception as e:
-        error = f"{type(e).__name__}: {e}" # TODO: style first part in red + bold
+        error = f"{type(e).__name__}: {e}"  # TODO: style first part in red + bold
         logger.error(error)
         # logger.exception(error)
         output = error, requests.codes.bad_request
@@ -68,12 +64,8 @@ def spin(
         p.start()
         return p
     else:
-        globals()["verbose"] = verbose
         logging.basicConfig(
-            level=log,
-            format="%(message)s",
-            datefmt="[%X]",
-            handlers=[RichHandler()]
+            level=log, format="%(message)s", datefmt="[%X]", handlers=[RichHandler()]
         )
 
         logger = logging.getLogger("toupie")

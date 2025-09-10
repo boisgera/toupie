@@ -33,13 +33,13 @@ uvx --with raylib toupie
 To check that your toupie server works as expected, do
 
 ```bash
-curl -X POST http://127.0.0.1:8000 -H "Content-Type: text/plain" --data-binary "print(1+1)"
+curl -X POST http://127.0.0.1:8000 -H "Content-Type: text/plain" --data-binary "1 + 1"
 ```
 
 or if `curl` is not available
 
 ```bash
-uvx --with requests python -c "import requests; r = requests.post(url='http://127.0.0.1:8000', headers={'Content-Type': 'text/plain'}, data='print(1+1)'); print(r.text)"
+uvx --with requests python -c "import requests; r = requests.post(url='http://127.0.0.1:8000', headers={'Content-Type': 'text/plain'}, data='1 + 1'); print(r.text)"
 ```
 
 In any case, you should see `2` should printed in your terminal.

@@ -39,7 +39,6 @@ def handler() -> tuple[str, int]:
             exec(code, globals())
     except Exception as e:
         error = f"{type(e).__name__}: {e}"
-        logger.error(error)
         output = error
         status = BAD
 

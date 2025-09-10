@@ -16,14 +16,14 @@ Getting Started
 Get [uv] and spin a toupie server with
 
 ```bash
-uvx --from git+https://github.com/boisgera/toupie toupie
+uvx toupie
 ```
 
 If you need additional Python dependencies, use the `--with` option.
 For example:
 
 ```bash
-uvx --with raylib --from git+https://github.com/boisgera/toupie toupie
+uvx --with raylib toupie
 ```
 
 ⚠️ **WARNING.** Anyone who gets access to your spinning toupie server can do [a lot of damage]!

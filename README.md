@@ -26,8 +26,7 @@ For example:
 uvx --with raylib --from git+https://github.com/boisgera/toupie toupie
 ```
 
-> [!CAUTION]  
-> Anyone who gets access to your spinning toupie server can do [a lot of damage]!
+⚠️ **WARNING.** Anyone who gets access to your spinning toupie server can do [a lot of damage]!
 
 ### Sanity check
 

@@ -1,10 +1,7 @@
 # Python Standard Library
 import ast
-from contextlib import redirect_stdout
-import io
 import logging
 from multiprocessing import Process
-from typing import Literal
 
 
 # Third-Party Librairies
@@ -12,6 +9,7 @@ from flask import Flask, request
 import requests
 from rich.logging import RichHandler
 import typer
+from typing_extensions import Annotated
 import waitress
 
 # Constants
@@ -20,32 +18,39 @@ PORT = "8000"
 
 app = Flask(__name__)
 
+OK = requests.codes.ok
+BAD = requests.codes.bad
 
-# TODO: reinstantiate the test eval with ast then eval with exec as a fallback?
-#       So that the interaction would "feel" like a Python console...
+
 @app.route("/", methods=["POST"])
-def handler() -> str | tuple[str, int]:
+def handler() -> tuple[str, int]:
     code = request.data.decode("utf-8").strip()
-    lines = ["... " + line for line in code.splitlines()]
-    lines[0] = ">>> " + lines[0][4:]
-    logger.info("\n".join(lines))
+    logger.info(code)
+    output = ""
+    status = OK
     try:
-        output_stream = io.StringIO()
-        with redirect_stdout(output_stream):
-            ast.parse(code, mode="exec")
+        try:
+            ast.parse(code, mode="eval")
+            obj = eval(code, globals())
+            # The 'str' transform makes it possible to output strings unquoted.
+            # The user can still wrap its request into a 'repr' to get the variant.
+            output = str(obj)
+        except SyntaxError:  # not an expression, try to interpret as a statement
             exec(code, globals())
-        output = output_stream.getvalue()
-        logger.info(f"{output}")
     except Exception as e:
-        # TODO: error to little info if INFO level not set, no?
-        error = f"{type(e).__name__}: {e}"  # TODO: style first part in red + bold
+        error = f"{type(e).__name__}: {e}"
         logger.error(error)
-        # logger.exception(error)
-        output = error, requests.codes.bad_request
-    return output
+        output = error
+        status = BAD
+
+    if status == OK and output != "":
+        logger.info(output)
+    elif status == BAD:
+        logger.error(output)
+    return output, status
 
 
-def send(code: str, port: int = PORT) -> str:
+def interpret(code: str, port: int = PORT) -> str:
     response = requests.post(
         url=f"http://127.0.0.1:{port}",
         headers={"Content-Type": "text/plain"},
@@ -55,23 +60,23 @@ def send(code: str, port: int = PORT) -> str:
 
 
 def spin(
-    port: int = PORT,
-    log: str = "INFO",
-    background: bool = False,
+    port: int = PORT, verbose: bool = False, background: bool = False
 ) -> Process | None:
     global logger
     if background:
-        p = Process(target=lambda: spin(port=port, log=log), daemon=True)
+        p = Process(target=lambda: spin(port=port, verbose=verbose), daemon=True)
         p.start()
         return p
     else:
         logging.basicConfig(
-            level=log, format="%(message)s", datefmt="[%X]", handlers=[RichHandler()]
+            level="INFO" if verbose else "WARNING",
+            format="%(message)s",
+            datefmt="[%X]",
+            handlers=[RichHandler()],
         )
-
         logger = logging.getLogger("toupie")
         logger.info(f"Toupie spinning at http://{HOST}:{port}")
-        logging.getLogger("waitress.queue").setLevel(logging.ERROR)
+        logging.getLogger("waitress").setLevel(logging.ERROR)
         waitress.serve(app, host=HOST, port=port, threads=1)
 
 
